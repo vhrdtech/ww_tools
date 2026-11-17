@@ -4,12 +4,12 @@ a case Python can't run carries a gap mark, a missing or stale mark fails. See d
 """
 
 import json
-from pathlib import Path
 
 import pytest
+import wire_weaver_checkout
 import wire_weaver as ww
 
-ROOT = Path(__file__).parents[3]
+ROOT = wire_weaver_checkout.root()
 CORPUS = json.loads((ROOT / "tests" / "conformance" / "corpus.json").read_text())
 CASES = CORPUS["cases"]
 

@@ -12,8 +12,8 @@ import time
 from pathlib import Path
 
 import pytest
+import wire_weaver_checkout
 
-ROOT = Path(__file__).parents[3]
 DEVICE_KEY = "inproc:keyed-device"
 READY_TIMEOUT = 10.0
 # tests/keyed/src/device.rs: `FLOWS`, `REMOVED`, `flow(i)`
@@ -22,16 +22,8 @@ REMOVED = 3
 
 
 def _device_binary() -> Path:
-    """Builds `keyed_pytest_device` if needed and returns its path."""
-    subprocess.run(
-        ["cargo", "build", "-q", "-p", "hub_pytest_device", "--bin", "keyed_pytest_device"],
-        cwd=ROOT,
-        check=True,
-    )
-    name = "keyed_pytest_device.exe" if sys.platform == "win32" else "keyed_pytest_device"
-    exe = ROOT / "target" / "debug" / name
-    assert exe.exists(), f"{exe} missing after cargo build"
-    return exe
+    """Builds `keyed_pytest_device` from the locked wire_weaver checkout if needed and returns its path."""
+    return wire_weaver_checkout.binary("hub_pytest_device", "keyed_pytest_device")
 
 
 def _wait_for_socket(runtime_dir: Path, deadline: float) -> None:

@@ -18,25 +18,17 @@ import time
 from pathlib import Path
 
 import pytest
+import wire_weaver_checkout
 
 import wire_weaver as ww
 
-ROOT = Path(__file__).parents[3]
 READY_TIMEOUT = 10.0
 LINES = {1: (5, 2), 2: (6, 1), 3: (7, 0)}
 BURST = 3  # samples per trigger on line 3, thermo_devices::w3::BURST
 
 
 def _devices_binary() -> Path:
-    subprocess.run(
-        ["cargo", "build", "-q", "-p", "thermo_devices", "--bin", "thermo_pytest_devices"],
-        cwd=ROOT,
-        check=True,
-    )
-    name = "thermo_pytest_devices.exe" if sys.platform == "win32" else "thermo_pytest_devices"
-    exe = ROOT / "target" / "debug" / name
-    assert exe.exists(), f"{exe} missing after cargo build"
-    return exe
+    return wire_weaver_checkout.binary("thermo_devices", "thermo_pytest_devices")
 
 
 def _wait_for_socket(runtime_dir: Path, deadline: float) -> None:

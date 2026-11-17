@@ -13,22 +13,15 @@ import time
 from pathlib import Path
 
 import pytest
+import wire_weaver_checkout
 
-ROOT = Path(__file__).parents[3]
 DEVICE_KEY = "inproc:pytest-device"
 READY_TIMEOUT = 10.0
 
 
 def _hub_binary() -> Path:
-    """Builds `hub_pytest_device` if needed and returns its path (`cargo build` is a no-op once it's current)."""
-    subprocess.run(
-        ["cargo", "build", "-q", "-p", "hub_pytest_device"],
-        cwd=ROOT,
-        check=True,
-    )
-    exe = ROOT / "target" / "debug" / ("hub_pytest_device.exe" if sys.platform == "win32" else "hub_pytest_device")
-    assert exe.exists(), f"{exe} missing after cargo build"
-    return exe
+    """Builds `hub_pytest_device` from the locked wire_weaver checkout if needed and returns its path."""
+    return wire_weaver_checkout.binary("hub_pytest_device", "hub_pytest_device")
 
 
 def _wait_for_socket(runtime_dir: Path, deadline: float) -> None:

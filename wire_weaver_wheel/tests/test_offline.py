@@ -6,12 +6,12 @@ generated server.
 
 import math
 import struct
-from pathlib import Path
 
 import pytest
+import wire_weaver_checkout
 import wire_weaver as ww
 
-API_CRATE = Path(__file__).parents[3] / "tests" / "dynamic_api"
+API_CRATE = wire_weaver_checkout.root() / "tests" / "dynamic_api"
 
 # `everything()` from tests/dynamic serialized by the code #[derive_shrink_wrap] generates
 EVERYTHING_HEX = (
@@ -166,7 +166,7 @@ def test_series():
 
 
 def test_credit_sinks():
-    api = ww.load_api(str(Path(__file__).parents[3] / "tests" / "credit_sink_api"), "CreditSinks")
+    api = ww.load_api(str(wire_weaver_checkout.root() / "tests" / "credit_sink_api"), "CreditSinks")
     assert api.plan.credit
     assert not api.plain.credit
     assert api.plan.signature == "credit sink plan: Vec<u8>"
@@ -180,7 +180,7 @@ def test_credit_sinks():
 
 def test_optional_items():
     # API-16: optional items are marked, a device's model also says which ones it leaves out (tests/traits)
-    api = ww.load_api(str(Path(__file__).parents[3] / "tests" / "traits_api"), "Traits")
+    api = ww.load_api(str(wire_weaver_checkout.root() / "tests" / "traits_api"), "Traits")
     assert api.i2c.i2c_write.signature == "i2c_write(data: u8) -> u8"
     assert api.i2c.i2c_wiggle_clock.signature == "i2c_wiggle_clock(count: u8) -> u8 (optional)"
     assert "rw i2c_pullups: bool (optional)" in repr(api.i2c)
@@ -309,7 +309,7 @@ def test_batched_streams():
     # `load_api` already runs generics::prepare, so the tree sees it resolved, same as any other generic use
     # (test_generic_types). `recv_batch()`'s numpy columns need an open stream (a device), covered by
     # tests/streams_batched's dyn_client tests instead, same split as the rest of this file.
-    api = ww.load_api(str(Path(__file__).parents[3] / "tests" / "streams_batched_api"), "StreamsBatched")
+    api = ww.load_api(str(wire_weaver_checkout.root() / "tests" / "streams_batched_api"), "StreamsBatched")
     assert repr(api.plain).startswith("<stream plain stream plain: Sample>")
     assert repr(api.counted).startswith("<stream counted stream counted: Sample>")
     assert repr(api.reliable).startswith("<stream reliable stream reliable: Sample>")
@@ -337,7 +337,7 @@ def test_recursive_types():
         api.tree.encode(looped)
 
 
-QUANTITIES_CRATE = Path(__file__).parents[3] / "tests" / "quantities_api"
+QUANTITIES_CRATE = wire_weaver_checkout.root() / "tests" / "quantities_api"
 
 
 def test_quantities():
@@ -481,7 +481,7 @@ def test_points():
     assert api.board_temp.encode({"coord": {"value": 128}}).hex() == (128).to_bytes(2, "little", signed=True).hex()
 
 
-CUSTOMARY_CRATE = Path(__file__).parents[3] / "tests" / "customary_api"
+CUSTOMARY_CRATE = wire_weaver_checkout.root() / "tests" / "customary_api"
 
 
 def test_mars_climate_orbiter():
