@@ -23,5 +23,8 @@ ww_std_cli.workspace = true
 [build-dependencies]
 ww_snapshot_set.workspace = true
 
+[dev-dependencies]
+toml.workspace = true
+
 [lints]
 workspace = true

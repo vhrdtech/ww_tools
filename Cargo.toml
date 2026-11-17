@@ -15,6 +15,8 @@ license = "MIT"
 [workspace.dependencies]
 anyhow = "1"
 pyo3 = "0.29"
+# Cargo.lock read by a test, without default features
+toml = { version = "1", default-features = false, features = ["parse"] }
 
 # The crates below live in their own repositories, taken by git without a rev: Cargo.lock pins each commit
 # (`cargo update -p NAME` moves it).

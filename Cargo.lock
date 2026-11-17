@@ -4768,6 +4768,7 @@ dependencies = [
  "anyhow",
  "chunky_ww_cli",
  "logring_ww_cli",
+ "toml",
  "wire_weaver_cli",
  "ww_snapshot_set",
  "ww_snapshots",
