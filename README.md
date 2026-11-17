@@ -2,6 +2,13 @@
 
 [![CI](https://github.com/vhrdtech/ww_tools/actions/workflows/ci.yml/badge.svg)](https://github.com/vhrdtech/ww_tools/actions/workflows/ci.yml)
 
+<p align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/vhrdtech/wire_weaver/master/docs/assets/wire_weaver_logo-dark.png">
+  <img src="https://raw.githubusercontent.com/vhrdtech/wire_weaver/master/docs/assets/wire_weaver_logo.png" alt="WireWeaver logo" width="480"/>
+</picture>
+</p>
+
 > The shipped tools of [WireWeaver](https://github.com/vhrdtech/wire_weaver): the `ww` command line tool and the
 > `wire_weaver` Python wheel, with every command built in.
 
