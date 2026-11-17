@@ -31,10 +31,9 @@ wheel into `target/wheels/` (`uv pip install target/wheels/wire_weaver-*.whl` or
 
 ## Documentation
 
-The commands, their flags, completion and plugins are described in WireWeaver's
-[command line reference](https://github.com/vhrdtech/wire_weaver/blob/master/docs/cli_reference.md), the Python
-module in its [Python page](https://github.com/vhrdtech/wire_weaver/blob/master/docs/python.md).
-[`FEATURES.md`](FEATURES.md) tracks what is done and planned.
+The [WireWeaver book](https://ww.vhrd.tech/) describes the commands, their flags, completion and plugins in the
+[command line reference](https://ww.vhrd.tech/cli_reference/), and the Python module in the
+[Python page](https://ww.vhrd.tech/python/). [`FEATURES.md`](FEATURES.md) tracks what is done and planned.
 
 ## Development
 
