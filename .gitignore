@@ -1,0 +1,6 @@
+target/
+.venv/
+__pycache__/
+# maturin develop (editable install) drops the compiled extension next to the wheel's pure-Python package
+wire_weaver_wheel/python/wire_weaver/*.so
+wire_weaver_wheel/python/wire_weaver/*.pyd
