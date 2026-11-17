@@ -8,16 +8,13 @@ description = "Talk to any WireWeaver device, with its API built at runtime from
 requires-python = ">=3.9"
 license = "MIT"
 classifiers = [
-    "Programming Language :: Rust",
-    "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Rust",
+  "Programming Language :: Python :: Implementation :: CPython",
 ]
 dynamic = ["version"]
 
 [dependency-groups]
-dev = [
-    "numpy>=2.0.2",
-    "pytest>=8",
-]
+dev = ["numpy>=2.0.2", "pytest>=8"]
 
 [tool.maturin]
 python-source = "python"
@@ -26,4 +23,10 @@ features = ["rtt"]
 
 [tool.uv]
 # Rebuild the package when any rust files change
-cache-keys = [{ file = "pyproject.toml" }, { file = "Cargo.toml" }, { file = "**/*.rs" }, { file = "../**/*.rs" }, { file = "../Cargo.lock" }]
+cache-keys = [
+  { file = "pyproject.toml" },
+  { file = "Cargo.toml" },
+  { file = "**/*.rs" },
+  { file = "../**/*.rs" },
+  { file = "../Cargo.lock" },
+]
