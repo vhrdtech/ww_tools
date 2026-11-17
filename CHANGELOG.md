@@ -4,7 +4,9 @@ The `ww` binary and the `wire_weaver` wheel were developed in the wire_weaver re
 `wire_weaver_py/`, then `ww_tools/`) and moved here in November 2026 with their history and feature item. Each crate
 keeps its own detailed changelog (`<crate>/CHANGELOG.md`); this file has one summary line per change.
 
-## Unreleased
+## [Unreleased]
+
+## [0.5.0] - 2026-11-17
 
 ### Breaking
 
