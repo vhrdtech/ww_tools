@@ -1,6 +1,6 @@
 """Interactive console with `wire_weaver` imported as `ww` and, when possible, a device connected as `dev`.
 
-Run from ww_tools/: `just py [options]` (builds the module first), or from wire_weaver_py:
+Run from the repository root: `just py [options]` (builds the module first), or from wire_weaver_wheel:
 `uv run python -i scripts/console.py [options]`. See `--help`.
 """
 
@@ -10,7 +10,7 @@ import sys
 
 import wire_weaver as ww
 
-os.chdir(os.environ.pop("WW_CWD", "."))  # `just py` runs in wire_weaver_py, paths are relative to where it was invoked
+os.chdir(os.environ.pop("WW_CWD", "."))  # `just py` runs in wire_weaver_wheel, paths are relative to where it was invoked
 
 p = argparse.ArgumentParser(prog="just py", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
 p.add_argument("--serial", help="USB serial number")
