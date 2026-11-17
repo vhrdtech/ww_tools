@@ -28,8 +28,9 @@ fn main() {
         _ => format!("{version} (unknown)"),
     };
     println!("cargo:rustc-env=WW_VERSION={long}");
-    // the API snapshots of every crate in the lock (ww_stdlib, ww_global, ww_tap, exact_units), so a device built
-    // with them is understood offline (EVO-80)
-    ww_snapshots::build::workspace_set("stdlib_set.rs")
+    // the API snapshots of every crate in the lock and of the whole standard library, so a device built with them is
+    // understood offline (EVO-80)
+    println!("cargo:rerun-if-changed=../Cargo.lock");
+    ww_snapshot_set::write("stdlib_set.rs")
         .unwrap_or_else(|e| panic!("embedding API snapshots: {e:#}"));
 }

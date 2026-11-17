@@ -1,0 +1,18 @@
+[package]
+name = "ww_snapshot_set"
+version.workspace = true
+authors.workspace = true
+description = "The API snapshot set ww and the wire_weaver wheel embed: the lock's crates and the whole standard library"
+edition.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+license.workspace = true
+# a build dependency of this workspace's binaries only
+publish = false
+
+[dependencies]
+anyhow.workspace = true
+ww_snapshots.workspace = true
+
+[lints]
+workspace = true

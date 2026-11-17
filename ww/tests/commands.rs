@@ -144,3 +144,30 @@ fn dfu_flash_completes_from_the_linked_command() {
     assert!(candidates.contains("--fw-version"), "{candidates}");
     std::fs::remove_dir_all(&dir).expect("removing the scratch directory");
 }
+
+/// EVO-80: the standard library's snapshots are embedded, also those of API crates no command depends on (ww_adc),
+/// so `ww api fetch` finds them with an empty Cargo home, no cache and no network.
+#[test]
+fn stdlib_snapshots_are_embedded() {
+    let dir = scratch("embedded");
+    for (krate, version) in [("ww_adc", "0.3.0"), ("ww_dfu", "0.1.0")] {
+        let out = Command::new(env!("CARGO_BIN_EXE_ww"))
+            .args(["api", "fetch", krate, version])
+            .env("PATH", &dir)
+            .env("WW_NO_CONFIG", "true")
+            .env("WW_OFFLINE", "1")
+            .env("WIRE_WEAVER_HOME", dir.join("wire_weaver"))
+            .env("WW_STATE_DIR", dir.join("state"))
+            .env("CARGO_HOME", dir.join("cargo"))
+            .env("HOME", &dir)
+            .output()
+            .expect("ww runs");
+        let text = String::from_utf8_lossy(&out.stdout);
+        assert!(
+            out.status.success() && text.contains("embedded in ww"),
+            "{krate} {version}: {text}{}",
+            String::from_utf8_lossy(&out.stderr)
+        );
+    }
+    std::fs::remove_dir_all(&dir).expect("removing the scratch directory");
+}

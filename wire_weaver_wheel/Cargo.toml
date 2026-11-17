@@ -24,7 +24,7 @@ wire_weaver_py.workspace = true
 ww_snapshots.workspace = true
 
 [build-dependencies]
-ww_snapshots.workspace = true
+ww_snapshot_set.workspace = true
 
 [lints]
 workspace = true

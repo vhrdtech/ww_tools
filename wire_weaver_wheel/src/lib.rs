@@ -4,7 +4,7 @@
 
 use pyo3::prelude::*;
 
-/// The API snapshots of every crate in the build's lock (ww_stdlib, ww_global, ww_tap, exact_units): a device built
+/// The API snapshots of every crate in the build's lock and of the whole standard library: a device built
 /// with them is understood with nothing on disk and no network (EVO-80).
 static STDLIB: ww_snapshots::Set = include!(concat!(env!("OUT_DIR"), "/stdlib_set.rs"));
 

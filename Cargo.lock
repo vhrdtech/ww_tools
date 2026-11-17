@@ -4751,6 +4751,7 @@ dependencies = [
  "logring_py",
  "pyo3",
  "wire_weaver_py",
+ "ww_snapshot_set",
  "ww_snapshots",
 ]
 
@@ -4768,6 +4769,7 @@ dependencies = [
  "chunky_ww_cli",
  "logring_ww_cli",
  "wire_weaver_cli",
+ "ww_snapshot_set",
  "ww_snapshots",
  "ww_std_cli",
 ]
@@ -5118,6 +5120,14 @@ dependencies = [
  "exact_units",
  "shrink_wrap",
  "ww_numeric",
+]
+
+[[package]]
+name = "ww_snapshot_set"
+version = "0.5.0"
+dependencies = [
+ "anyhow",
+ "ww_snapshots",
 ]
 
 [[package]]

@@ -21,7 +21,7 @@ ww_snapshots.workspace = true
 ww_std_cli.workspace = true
 
 [build-dependencies]
-ww_snapshots.workspace = true
+ww_snapshot_set.workspace = true
 
 [lints]
 workspace = true
