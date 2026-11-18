@@ -27,6 +27,7 @@ logring_ww_cli = { git = "https://github.com/vhrdtech/logring" }
 # wire_weaver: the generic commands, the Python module library and the snapshot embedding
 wire_weaver_cli = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
 wire_weaver_py = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_hub = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
 ww_snapshots = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
 # ww_stdlib: the standard library's device commands
 ww_std_cli = { version = "0.5.0", git = "https://github.com/vhrdtech/ww_stdlib" }

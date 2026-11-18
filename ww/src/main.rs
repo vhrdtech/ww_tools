@@ -12,5 +12,7 @@ fn main() -> anyhow::Result<()> {
     wire_weaver_cli::main(wire_weaver_cli::Program {
         name: "ww",
         version: env!("WW_VERSION"),
+        // no recorder yet; P2401#17nov-2211b will set it to eventfull_tap
+        hub: ww_hub::HubHost::default(),
     })
 }

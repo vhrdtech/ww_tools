@@ -35,3 +35,9 @@ support, what is being worked on and what is planned, for humans and AI agents a
   0.3.0` answers `embedded in ww` offline. `wire_weaver.logring` in the wheel. Tests: the binary's command list and
   its help, `ww logring` on an image, `ww dfu flash` help and completion with no plugin on PATH, the embedded
   snapshots, pytest with WireWeaver's fixtures from the locked checkout, the release wheel imported from a fresh venv.
+
+- ✅ **TOOL-41 `ww` tracks current wire_weaver** · `v0.5` — `Cargo.lock` takes up wire_weaver (now at `db8f06c`,
+  past EVO-82), `ww_stdlib`, `ww_tape` and `shrink_wrap`, and logring's own lock to pick up its matching
+  `exact_units` snapshot fix. `ww api save --force` writes the current snapshot model format instead of silently
+  downgrading it. `wire_weaver_cli::Program` gained a `hub: ww_hub::HubHost` field for the hub's Captures API; `ww`
+  passes `HubHost::default()` (the hub records nothing) until P2401#17nov-2211b sets it to `eventfull_tap`.

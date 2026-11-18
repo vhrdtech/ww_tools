@@ -17,6 +17,7 @@ anyhow.workspace = true
 chunky_ww_cli.workspace = true
 logring_ww_cli.workspace = true
 wire_weaver_cli.workspace = true
+ww_hub.workspace = true
 ww_snapshots.workspace = true
 ww_std_cli.workspace = true
 
