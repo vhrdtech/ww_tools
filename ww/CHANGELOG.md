@@ -11,8 +11,9 @@
 
 - `ww logring` and `ww chunky` are built in, and `ww dfu flash` runs chunky's flash in process: no plugin needed (TOOL-39).
 - New crate (TOOL-36): the `ww` binary, `wire_weaver_cli` and `ww_std_cli` linked; `cargo install --git .. ww`.
-- `wire_weaver_cli::Program` takes a `hub: ww_hub::HubHost`; `ww` passes `HubHost::default()` (the hub records nothing) until P2401#17nov-2211b sets it to `eventfull_tap` (TOOL-41).
+- `wire_weaver_cli::Program` takes a `hub: ww_hub::HubHost`; `ww` passes `HubHost::default()` (records nothing) (TOOL-41).
 
 ### Fixes
 
-- `Cargo.lock` takes up wire_weaver (past EVO-82), `ww_stdlib`, `ww_tape` and `shrink_wrap`, and logring's own lock to pick up its matching `exact_units` fix: `ww api save --force` writes the current snapshot model format instead of silently downgrading it (TOOL-41).
+- The embedded API snapshots hold every standard library crate (`ww_adc`, `ww_spi`, ...), not only those a command links: `ww api fetch ww_adc 0.3.0` answers `embedded in ww` offline (TOOL-39).
+- `ww api save --force` no longer downgrades snapshots to an older model format (TOOL-41).
