@@ -17,3 +17,4 @@
 
 - The embedded API snapshots hold every standard library crate (`ww_adc`, `ww_spi`, ...), not only those a command links: `ww api fetch ww_adc 0.3.0` answers `embedded in ww` offline (TOOL-39).
 - `ww api save --force` no longer downgrades snapshots to an older model format (TOOL-41).
+- `Cargo.lock` takes up wire_weaver at `383e4bf0` (past SRV-64's follow-up fixes); still no `CaptureHost` to give the hub, so `ww` keeps passing `HubHost::default()` (TOOL-42).

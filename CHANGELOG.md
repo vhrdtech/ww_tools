@@ -6,6 +6,8 @@ keeps its own detailed changelog (`<crate>/CHANGELOG.md`); this file has one sum
 
 ## [Unreleased]
 
+- `ww`: wire_weaver current past SRV-64; captures still unwired, no `CaptureHost` exists yet (TOOL-42).
+
 ## [0.5.1] - 2026-11-18
 
 - `ww`: wire_weaver, ww_stdlib, ww_tape and shrink_wrap current; `ww api save` no longer downgrades snapshots (TOOL-41).

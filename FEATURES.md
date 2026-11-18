@@ -41,3 +41,11 @@ support, what is being worked on and what is planned, for humans and AI agents a
   `exact_units` snapshot fix. `ww api save --force` writes the current snapshot model format instead of silently
   downgrading it. `wire_weaver_cli::Program` gained a `hub: ww_hub::HubHost` field for the hub's Captures API; `ww`
   passes `HubHost::default()` (the hub records nothing) until P2401#17nov-2211b sets it to `eventfull_tap`.
+
+- 🚧 **TOOL-42 `ww` tracks current wire_weaver past SRV-64** · `v0.5` — `Cargo.lock` takes up wire_weaver at
+  `383e4bf0` (hub connection counting at accept, poison-safe capture guards, snapshot-dependency checks past SRV-64);
+  `ww_stdlib`, logring and chunky_mcu_updater were already current. `wire_weaver_cli::Program::hub` and
+  `wire_weaver_py::set_hub_host` (SRV-64's `CaptureHost`) are unchanged from TOOL-41: no `CaptureHost` exists yet in
+  wire_weaver, `ww_stdlib` or logring (wire_weaver's own `FEATURES.md` SRV-64 entry: "Missing: eventfull's capture
+  host (P2555 piece 8)"), so `ww` and the wheel still give their hub no capture host and it records nothing. Missing:
+  wiring eventfull's capture host once it exists (P2401#17nov-2211b, P2555 piece 8).
