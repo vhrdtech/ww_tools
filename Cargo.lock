@@ -4771,7 +4771,7 @@ dependencies = [
 
 [[package]]
 name = "wire_weaver_wheel"
-version = "0.5.1"
+version = "0.5.2"
 dependencies = [
  "logring_py",
  "pyo3",
@@ -4788,7 +4788,7 @@ checksum = "1ebf944e87a7c253233ad6766e082e3cd714b5d03812acc24c318f549614536e"
 
 [[package]]
 name = "ww"
-version = "0.5.1"
+version = "0.5.2"
 dependencies = [
  "anyhow",
  "chunky_ww_cli",
@@ -5169,7 +5169,7 @@ dependencies = [
 
 [[package]]
 name = "ww_snapshot_set"
-version = "0.5.1"
+version = "0.5.2"
 dependencies = [
  "anyhow",
  "ww_snapshots",

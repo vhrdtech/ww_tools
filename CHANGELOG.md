@@ -6,6 +6,8 @@ keeps its own detailed changelog (`<crate>/CHANGELOG.md`); this file has one sum
 
 ## [Unreleased]
 
+## [0.5.2] - 2026-11-18
+
 - `ww`: wire_weaver current past SRV-64; captures still unwired, no `CaptureHost` exists yet (TOOL-42).
 
 ## [0.5.1] - 2026-11-18
