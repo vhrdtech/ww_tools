@@ -12,8 +12,8 @@ default:
 # main and the crates that depend on them (through tpm when installed, otherwise all), then the Python tests
 test *flags:
     if [ "{{ flags }}" = "--changed" ]; then \
-        if command -v changed-tests >/dev/null 2>&1; then f=$(changed-tests) && if [ -n "$f" ]; then cargo nextest run --workspace -E "$f"; fi && {{ just_executable() }} test-py; \
-        else echo "changed-tests not found; running the full test suite instead" >&2; {{ just_executable() }} test-all; fi; \
+        if command -v changedtests >/dev/null 2>&1; then f=$(changedtests) && if [ -n "$f" ]; then cargo nextest run --workspace -E "$f"; fi && {{ just_executable() }} test-py; \
+        else echo "changedtests not found; running the full test suite instead" >&2; {{ just_executable() }} test-all; fi; \
     else {{ just_executable() }} test-all {{ flags }}; fi
 
 # Every test: nextest, the doctests, the Python tests, the builds of `just check`
