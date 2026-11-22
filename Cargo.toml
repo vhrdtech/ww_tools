@@ -47,24 +47,24 @@ logring_ww_cli = { git = "https://github.com/vhrdtech/logring" }
 tests_common = { version = "0.1.0", git = "https://github.com/vhrdtech/wire_weaver" }
 # wire_weaver: the generic commands, the Python module library, the snapshot embedding, and the client, link and
 # tap crates the tap decoder reads
-wire_weaver = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
-wire_weaver_cli = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
-wire_weaver_client = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
-wire_weaver_core = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
-wire_weaver_py = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
-ww_api = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver", default-features = false }
+wire_weaver = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
+wire_weaver_cli = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
+wire_weaver_client = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
+wire_weaver_core = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
+wire_weaver_py = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_api = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver", default-features = false }
 ww_client_server = { version = "0.2.0", git = "https://github.com/vhrdtech/wire_weaver" }
-ww_device = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
-ww_framer = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
-ww_hub = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
-ww_link = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_device = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_framer = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_hub = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_link = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
 ww_self = { version = "0.3.0", git = "https://github.com/vhrdtech/wire_weaver" }
 # ww_base: versions and units
 ww_si = { version = "0.5.0", git = "https://github.com/vhrdtech/ww_base", default-features = false }
-ww_snapshots = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_snapshots = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
 # ww_stdlib: the standard library's device commands
 ww_std_cli = { version = "0.5.0", git = "https://github.com/vhrdtech/ww_stdlib" }
-ww_stream = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_stream = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
 ww_tap = { version = "0.1.0", git = "https://github.com/vhrdtech/wire_weaver", default-features = false }
 # ww_tape: the tape block format the decoder reads
 ww_tape = { version = "0.4.0", git = "https://github.com/vhrdtech/ww_tape", default-features = false }

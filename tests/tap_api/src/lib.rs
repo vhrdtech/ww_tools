@@ -10,9 +10,12 @@ use ww_si::{AnyQuantity, Fixed};
 #[ww_api_root]
 pub trait TapDemo {
     /// `a + b`, wrapping
+    #[effect(read)]
     fn add(a: u32, b: u32) -> u32;
     /// `len` bytes counting up from 0: a long reply is split over several USB packets
+    #[effect(read)]
     fn blob(len: u16) -> RefVec<'i, u8>;
+    #[effect(edit)]
     property!(rw speed: Fixed<Rpm, One, u16>);
     /// Changes on every poll of the device, observed
     property!(ro+observe load: Fixed<Ratio, Centi, u16>);
