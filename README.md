@@ -35,6 +35,8 @@ wheel into `target/wheels/` (`uv pip install target/wheels/wire_weaver-*.whl` or
 | `ww` | the `ww` binary: `wire_weaver_cli`, `ww_std_cli`, `logring_ww_cli` and `chunky_ww_cli` linked together |
 | `wire_weaver_wheel` | the `wire_weaver` Python wheel: `wire_weaver_py` and `logring_py` as one extension module, built by maturin |
 | `ww_snapshot_set` | the API snapshot set both embed: the lock's crates and every crate of the locked ww_stdlib |
+| `ww_tap_decoder` | decoder of link tap captures: frames, messages and API calls from `ww_tape` blocks, with link stats |
+| `ww_tape_bundle` | name paths and track keys of `ww_tape` tracks from an API bundle |
 
 ## Documentation
 

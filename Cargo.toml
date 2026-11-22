@@ -2,7 +2,15 @@
 # of its standard library (ww_stdlib), of logring and of chunky_mcu_updater compiled in.
 [workspace]
 resolver = "3"
-members = ["wire_weaver_wheel", "ww", "ww_snapshot_set"]
+members = [
+  "tests/tap_api",
+  "tests/tape_identity",
+  "wire_weaver_wheel",
+  "ww",
+  "ww_snapshot_set",
+  "ww_tap_decoder",
+  "ww_tape_bundle",
+]
 
 [workspace.package]
 version = "0.5.2"
@@ -14,7 +22,16 @@ license = "MIT"
 
 [workspace.dependencies]
 anyhow = "1"
+# the decoder's tests: CRC-32C of hand-made UDP frames
+crc = { version = "3.4", default-features = false }
 pyo3 = "0.29"
+# the decoder's tests: async test runtime
+tokio = { version = "1.54", default-features = false, features = [
+  "macros",
+  "rt-multi-thread",
+  "sync",
+  "time",
+] }
 # Cargo.lock read by a test, without default features
 toml = { version = "1", default-features = false, features = ["parse"] }
 
@@ -22,18 +39,42 @@ toml = { version = "1", default-features = false, features = ["parse"] }
 # (`cargo update -p NAME` moves it).
 # logring and chunky_mcu_updater: their `ww logring`, `ww chunky` commands and logring's Python module
 chunky_ww_cli = { git = "https://github.com/romixlab/chunky_mcu_updater" }
+# wire_weaver's test fixtures: the decoder's test device and its stand-in global trait, keyed paths
+global_fixture_api = { version = "0.1.0", git = "https://github.com/vhrdtech/wire_weaver", default-features = false }
+keyed_api = { version = "0.1.0", git = "https://github.com/vhrdtech/wire_weaver" }
 logring_py = { git = "https://github.com/vhrdtech/logring" }
 logring_ww_cli = { git = "https://github.com/vhrdtech/logring" }
-# wire_weaver: the generic commands, the Python module library and the snapshot embedding
+tests_common = { version = "0.1.0", git = "https://github.com/vhrdtech/wire_weaver" }
+# wire_weaver: the generic commands, the Python module library, the snapshot embedding, and the client, link and
+# tap crates the tap decoder reads
+wire_weaver = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
 wire_weaver_cli = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
+wire_weaver_client = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
+wire_weaver_core = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
 wire_weaver_py = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_api = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver", default-features = false }
+ww_client_server = { version = "0.2.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_device = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_framer = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
 ww_hub = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_link = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_self = { version = "0.3.0", git = "https://github.com/vhrdtech/wire_weaver" }
+# ww_base: versions and units
+ww_si = { version = "0.5.0", git = "https://github.com/vhrdtech/ww_base", default-features = false }
 ww_snapshots = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
 # ww_stdlib: the standard library's device commands
 ww_std_cli = { version = "0.5.0", git = "https://github.com/vhrdtech/ww_stdlib" }
+ww_stream = { version = "0.5.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_tap = { version = "0.1.0", git = "https://github.com/vhrdtech/wire_weaver", default-features = false }
+# ww_tape: the tape block format the decoder reads
+ww_tape = { version = "0.4.0", git = "https://github.com/vhrdtech/ww_tape", default-features = false }
+ww_version = { version = "0.2.0", git = "https://github.com/vhrdtech/ww_base", default-features = false }
 
 # the crates of this repository
+tap_api = { version = "0.1.0", path = "./tests/tap_api" }
 ww_snapshot_set = { version = "0.5.2", path = "./ww_snapshot_set" }
+ww_tap_decoder = { version = "0.1.0", path = "./ww_tap_decoder" }
+ww_tape_bundle = { version = "0.1.0", path = "./ww_tape_bundle" }
 
 [workspace.lints.rust]
 unused_lifetimes = "warn"

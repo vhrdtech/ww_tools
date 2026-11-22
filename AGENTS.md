@@ -11,6 +11,10 @@ of WireWeaver (`wire_weaver_cli`, `wire_weaver_py`), of its standard library (`w
 command: commands register themselves in their own crates (inventory, TOOL-36), and linking the crate adds them.
 A debug tool must work without being debugged itself: `ww` needs no plugin, the wheel nothing else installed.
 
+It also holds what reads link tap captures (TR-14), apart from wire_weaver so that wire_weaver does not follow
+`ww_tape`: the decoder library `ww_tap_decoder` and `ww_tape_bundle` (track keys by name path, STD-125). The tap
+hook itself (`ww_tap`, `TapSource`) stays in wire_weaver and needs no `ww_tape`.
+
 Nothing depends on this repository. A change in the crates it links lands in their repository first, then comes
 here with `cargo update -p NAME`.
 
@@ -23,6 +27,10 @@ here with `cargo update -p NAME`.
 | `wire_weaver_wheel/` | the wheel: `src/lib.rs` (the `_wire_weaver` module), `python/wire_weaver/` (the package), `tests/` (pytest), `pyproject.toml` |
 | `wire_weaver_wheel/tests/wire_weaver_checkout.py` | finds the locked wire_weaver checkout: the Python tests read its fixtures and build its simulated devices |
 | `ww_snapshot_set/` | build dependency: the API snapshots of the lock's crates and of every crate in the locked ww_stdlib checkout |
+| `ww_tap_decoder/` | link tap capture decoder: frames, messages and API calls from `ww_tape` blocks, link stats, the tap's track naming; end-to-end tests over simulated USB (`src/e2e_tests.rs`) on a capture writer of its tests (`src/test_tape.rs`) |
+| `ww_tape_bundle/` | name paths and track keys of `ww_tape` tracks from an API bundle |
+| `tests/tap_api/` | the decoder's test device API: calls, a long reply, a global trait stand-in, a quantity by reference |
+| `tests/tape_identity/` | track keys by name path over real bundles of wire_weaver's fixtures |
 
 ## FEATURES.md
 
@@ -66,7 +74,8 @@ Single test: `cargo nextest run -p ww <test>` (nextest is required); `cd wire_we
 
 - Every crate outside this repository comes by git, no `rev` or `tag`: wire_weaver crates from vhrdtech/wire_weaver,
   `ww_std_cli` from vhrdtech/ww_stdlib, `logring_*` from vhrdtech/logring, `chunky_ww_cli` from
-  romixlab/chunky_mcu_updater. Their own dependencies (shrink_wrap, exact_units, ww_base, ww_tape) come with them.
+  romixlab/chunky_mcu_updater, `ww_tape` from vhrdtech/ww_tape, `ww_si` and `ww_version` from vhrdtech/ww_base.
+  The decoder's tests take wire_weaver's test crates (`tests_common`, `global_fixture_api`, `keyed_api`) the same way.
 - `Cargo.lock` holds one copy of each of these crates (`ww/tests/it/lock.rs` checks it). Two copies mean two
   registries of commands or two sets of types: update the repository that lags first.
 - No `[patch]` is committed. To develop against local checkouts, put a `[patch."https://github.com/..."]` in a

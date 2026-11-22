@@ -49,3 +49,23 @@ support, what is being worked on and what is planned, for humans and AI agents a
   wire_weaver, `ww_stdlib` or logring (wire_weaver's own `FEATURES.md` SRV-64 entry: "Missing: eventfull's capture
   host (P2555 piece 8)"), so `ww` and the wheel still give their hub no capture host and it records nothing. Missing:
   wiring eventfull's capture host once it exists (P2401#17nov-2211b, P2555 piece 8).
+
+## Transport (TR)
+
+- ✅ **TR-14 link tap capture decoder** · `v0.5` — the reading side of wire_weaver's link tap (TR-14 there: the `Tap`
+  hook, `TapSource`, `ww_tap`'s records) moved here with the item's id, so wire_weaver has no `ww_tape` dependency.
+  `ww_tap_decoder`: frame ↔ message linkage, cross-check against the message records, framer and link statistics
+  (`Stats`), request/reply pairing by seq, calls and replies named and explained from the API bundle a capture
+  carries or from snapshots (global traits by `ww_global` id on a traits-only connection, API-20), a session's wire
+  version (`session_wire_version`). Its `tape` module names a link's `ww_tape` tracks and the tap clock
+  (`define_link_tracks`, `define_clocks`, `track_key`) and finds them again (`link_stream_of`). Input: records
+  (`Decoder::record`, `session`, `gap`) or blocks (`feed`). Tests: a dynamic client against `ww_device::Server` over
+  simulated USB with a capture writer of the tests, shared packets, split replies, a lost packet (with and without
+  the frame counter), captures replayed identically, a global trait named on full and traits-only connections, a
+  quantity whose unit is sent by reference decoded from the sent bundle alone.
+
+## Standard library (STD)
+
+- ✅ **STD-125 track identity by name path, the API side** · `v0.5` — `ww_tape_bundle` (`name_path`,
+  `key_in_bundle`) and its tests (`tests/tape_identity`, over wire_weaver's fixtures from the checkout `Cargo.lock`
+  places) moved here from wire_weaver; the tape format's side is in vhrdtech/ww_tape under the same id.

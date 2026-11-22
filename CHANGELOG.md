@@ -6,6 +6,8 @@ keeps its own detailed changelog (`<crate>/CHANGELOG.md`); this file has one sum
 
 ## [Unreleased]
 
+- New crates `ww_tap_decoder` and `ww_tape_bundle`, moved from wire_weaver; `ww monitor`, `ww stats`, `ww capture` are gone (TR-14).
+
 ## [0.5.2] - 2026-11-18
 
 - `ww`: wire_weaver current past SRV-64; captures still unwired, no `CaptureHost` exists yet (TOOL-42).
