@@ -2,7 +2,8 @@
 //! keyed by the stream's name path ([track_key]) and told apart by the link's identity ([LinkIdentity], the
 //! track's dimensions), so the same device has the same track ids in every capture. A producer defines the tap
 //! clock ([define_clocks]) and each link's tracks ([define_link_tracks]); a reader finds a link and stream by a
-//! track's definition ([link_stream_of]), never by its number.
+//! track's definition ([link_stream_of]), never by its number. Each stream is laid out as its `#[track]` in
+//! [LinkTap](ww_tap::LinkTap) says (API-71), read from ww_tap's bundle ([TapLayouts]).
 
 use wire_weaver::prelude::*;
 use ww_tape::{
@@ -10,7 +11,9 @@ use ww_tape::{
     MapSegment, Segment, Slot, TrackDef, TrackId, TrackNum, TrackRepeat, TrackSpec,
 };
 
+use ww_self::{ApiBundleOwned, ApiLevelLocationOwned};
 use ww_tap::{LinkEvent, Session, api, dims, ids};
+use ww_tape_bundle::{LayoutError, StreamKind, StreamLayout, stream_layout_at};
 
 /// Streams of a link, each a track: the ids of [ids] from 0 on.
 pub const STREAMS: usize = 7;
@@ -155,9 +158,118 @@ pub fn define_clocks(defs: &mut Definitions, wall_ns_at_zero: u64) -> ClockNum {
     host
 }
 
+/// How the streams of [LinkTap](ww_tap::LinkTap) are laid out on a tape: each one's `#[track]` (API-71), from
+/// ww_tap's bundle. Every tap stream is an events track: a series needs a period no tap record has.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct TapLayouts {
+    streams: Vec<StreamLayout>,
+}
+
+/// Why the tap's stream layouts can't be read.
+#[derive(Debug)]
+pub enum TapLayoutError {
+    /// No snapshot of ww_tap at the version this build has ([api]).
+    NoSnapshot,
+    /// The bundle has no level of the `LinkTap` trait.
+    NoLinkTap,
+    /// A stream of [ids] has no layout.
+    Layout(LayoutError),
+    /// A stream is laid out as a series, which a tap record can't be.
+    Series { stream: &'static str },
+}
+
+impl core::fmt::Display for TapLayoutError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self {
+            TapLayoutError::NoSnapshot => {
+                write!(f, "no snapshot of {:?}", api())
+            }
+            TapLayoutError::NoLinkTap => f.write_str("the bundle has no LinkTap trait"),
+            TapLayoutError::Layout(e) => write!(f, "{e}"),
+            TapLayoutError::Series { stream } => {
+                write!(
+                    f,
+                    "tap stream `{stream}` is a series, a tap record has no period"
+                )
+            }
+        }
+    }
+}
+
+impl core::error::Error for TapLayoutError {
+    fn source(&self) -> Option<&(dyn core::error::Error + 'static)> {
+        match self {
+            TapLayoutError::Layout(e) => Some(e),
+            _ => None,
+        }
+    }
+}
+
+impl TapLayouts {
+    /// The layouts from ww_tap's snapshot at this build's version ([api]), found by `resolver`.
+    pub fn resolve(resolver: &ww_snapshots::Resolver) -> Result<Self, TapLayoutError> {
+        let bundle = resolver
+            .snapshot(&api().make_owned())
+            .ok_or(TapLayoutError::NoSnapshot)?;
+        Self::from_bundle(bundle)
+    }
+
+    /// The layouts from a bundle of ww_tap: its `LinkTap` level.
+    pub fn from_bundle(bundle: &ApiBundleOwned) -> Result<Self, TapLayoutError> {
+        let level = bundle
+            .traits
+            .iter()
+            .find_map(|t| match t {
+                ApiLevelLocationOwned::InLine { level, .. } if level.trait_name == "LinkTap" => {
+                    Some(level)
+                }
+                _ => None,
+            })
+            .ok_or(TapLayoutError::NoLinkTap)?;
+        let streams = (0..STREAMS)
+            .map(|stream| {
+                let stream = u32::try_from(stream).expect("a stream id fits u32");
+                let layout =
+                    stream_layout_at(bundle, level, &[stream]).map_err(TapLayoutError::Layout)?;
+                match layout.kind {
+                    StreamKind::Events(_) => Ok(layout),
+                    StreamKind::Series { .. } => Err(TapLayoutError::Series {
+                        stream: ids::stream_name(stream).expect("one of ids' streams"),
+                    }),
+                }
+            })
+            .collect::<Result<_, _>>()?;
+        Ok(TapLayouts { streams })
+    }
+
+    /// The layout of `stream` ([ids]).
+    ///
+    /// # Panics
+    ///
+    /// When `stream` is not one of [ids]' streams.
+    pub fn stream(&self, stream: u32) -> &StreamLayout {
+        self.streams
+            .get(stream as usize)
+            .expect("stream is one of ids' streams")
+    }
+
+    /// The events track kind of `stream` ([ids]).
+    ///
+    /// # Panics
+    ///
+    /// When `stream` is not one of [ids]' streams.
+    pub fn events(&self, stream: u32) -> ww_tape::EventsDef {
+        match self.stream(stream).kind {
+            StreamKind::Events(def) => def,
+            StreamKind::Series { .. } => unreachable!("from_bundle admits only events"),
+        }
+    }
+}
+
 /// Define in `defs` the tracks of a link with the dimensions of `identity`, on the tap clock `clock` (from
-/// [define_clocks]): one track per stream of [LinkTap](ww_tap::LinkTap), its number at the stream's id ([ids]). The
-/// session track is a state track.
+/// [define_clocks]): one track per stream of [LinkTap](ww_tap::LinkTap), its number at the stream's id ([ids]),
+/// laid out as `layouts` says. The session track is a state track. Fails when the link's identity has a dimension
+/// a stream's `#[track(dims(..))]` doesn't name.
 ///
 /// # Panics
 ///
@@ -166,10 +278,14 @@ pub fn define_link_tracks(
     defs: &mut Definitions,
     clock: ClockNum,
     identity: &LinkIdentity,
-) -> [TrackNum; STREAMS] {
+    layouts: &TapLayouts,
+) -> Result<[TrackNum; STREAMS], LayoutError> {
     let api = api();
     let dimensions: Vec<Dimension<'_>> = identity.dimensions().collect();
-    core::array::from_fn(|stream| {
+    for layout in &layouts.streams {
+        layout.check_dimensions(dimensions.iter().map(|d| d.name))?;
+    }
+    Ok(core::array::from_fn(|stream| {
         let stream = u32::try_from(stream).expect("a stream id fits u32");
         let path = [UNib32(stream)];
         let label = format!(
@@ -193,13 +309,13 @@ pub fn define_link_tracks(
             } else {
                 TrackRepeat::Stream
             },
-            kind: ww_tape::TrackKind::Events(ww_tape::EventsDef::INSTANTS),
+            kind: ww_tape::TrackKind::Events(layouts.events(stream)),
             // zeros: the owner of the piece; the link's tracks belong to the capture itself
             owner: [0; 32],
             relations: RefVec::Slice { slice: &[] },
         })
         .expect("a link's track definition is valid and its clock held")
-    })
+    }))
 }
 
 /// Drop from `defs` the tracks of each link a [LinkEvent::Closed] in the records block `block` closes, as a relay of

@@ -5414,6 +5414,7 @@ dependencies = [
  "ww_stream",
  "ww_tap",
  "ww_tape",
+ "ww_tape_bundle",
  "ww_version",
 ]
 

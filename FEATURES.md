@@ -50,6 +50,17 @@ support, what is being worked on and what is planned, for humans and AI agents a
   host (P2555 piece 8)"), so `ww` and the wheel still give their hub no capture host and it records nothing. Missing:
   wiring eventfull's capture host once it exists (P2401#17nov-2211b, P2555 piece 8).
 
+## API (API)
+
+- ✅ **API-71 track layout on streams, the recorder side** · `v0.5` — wire_weaver's `#[track(points | spans |
+  series, dims(..), flags)]` (API-71 there: the attribute, `ww_self::Track`, the evolution rule) read by recorders.
+  `ww_tape_bundle`: `stream_layout` / `stream_layout_at` give a stream's layout beside its name path, as ww_tape's
+  `EventsDef` (instants or spans, flags) or a series' channel count (`StreamKind`), and `StreamLayout::
+  check_dimensions` refuses a dimension the stream doesn't declare. `ww_tap_decoder`: `TapLayouts` reads `LinkTap`'s
+  layouts from ww_tap's snapshot, `define_link_tracks` lays each tap track out by it and refuses a link dimension
+  its streams don't name. Tests: `tests/tape_identity` (`layout`, over wire_weaver's `tests/track_api`),
+  `ww_tap_decoder` (`tap_streams_are_points_with_the_link_dims`).
+
 ## Transport (TR)
 
 - ✅ **TR-14 link tap capture decoder** · `v0.5` — the reading side of wire_weaver's link tap (TR-14 there: the `Tap`
