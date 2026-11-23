@@ -29,6 +29,7 @@ tests_common.workspace = true
 tokio.workspace = true
 wire_weaver_client = { workspace = true, features = ["in_process"] }
 ww_device = { workspace = true, features = ["std"] }
+ww_quantity.workspace = true
 ww_si = { workspace = true, features = ["std"] }
 ww_stream.workspace = true
 

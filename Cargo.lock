@@ -5422,6 +5422,7 @@ dependencies = [
  "ww_device",
  "ww_framer",
  "ww_link",
+ "ww_quantity",
  "ww_self",
  "ww_si",
  "ww_snapshots",

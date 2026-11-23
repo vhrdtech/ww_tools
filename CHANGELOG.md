@@ -6,6 +6,7 @@ keeps its own detailed changelog (`<crate>/CHANGELOG.md`); this file has one sum
 
 ## [Unreleased]
 
+- Take wire_weaver 3b59cb59: mount slots (SRV-76), model format 0.7.0; `ww_tape_bundle` names paths through a slot.
 - New crates `ww_tap_decoder` and `ww_tape_bundle`, moved from wire_weaver; `ww monitor`, `ww stats`, `ww capture` are gone (TR-14).
 
 ## [0.5.2] - 2026-11-18

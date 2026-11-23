@@ -58,6 +58,7 @@ ww_device = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver"
 ww_framer = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
 ww_hub = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
 ww_link = { version = "0.6.0", git = "https://github.com/vhrdtech/wire_weaver" }
+ww_quantity = { version = "0.1.0", git = "https://github.com/vhrdtech/wire_weaver" }
 ww_self = { version = "0.3.0", git = "https://github.com/vhrdtech/wire_weaver" }
 # ww_base: versions and units
 ww_si = { version = "0.5.0", git = "https://github.com/vhrdtech/ww_base", default-features = false }
