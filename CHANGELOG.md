@@ -6,6 +6,7 @@ keeps its own detailed changelog (`<crate>/CHANGELOG.md`); this file has one sum
 
 ## [Unreleased]
 
+- Recorders lay streams out by wire_weaver's `#[track]`: `ww_tape_bundle::stream_layout`, `ww_tap_decoder::TapLayouts` (API-71).
 - New crates `ww_tap_decoder` and `ww_tape_bundle`, moved from wire_weaver; `ww monitor`, `ww stats`, `ww capture` are gone (TR-14).
 
 ## [0.5.2] - 2026-11-18

@@ -139,7 +139,9 @@ impl Inner {
     }
 
     fn define(&mut self, link: u32, identity: LinkIdentity) {
-        let tracks = crate::define_link_tracks(&mut self.defs, self.tap_clock, &identity);
+        let tracks =
+            crate::define_link_tracks(&mut self.defs, self.tap_clock, &identity, tap_layouts())
+                .expect("a tap link's dimensions are its streams' dims");
         let l = &mut self.links[link as usize];
         l.tracks = Some(tracks);
         l.identity = Some(identity);
@@ -328,4 +330,12 @@ pub(crate) fn host_session<'i>(
         peer,
         device_info: RefVec::Slice { slice: &[] },
     }
+}
+
+/// The tap's stream layouts, from ww_tap's snapshot through the tests' resolver.
+pub(crate) fn tap_layouts() -> &'static crate::TapLayouts {
+    static LAYOUTS: std::sync::LazyLock<crate::TapLayouts> = std::sync::LazyLock::new(|| {
+        crate::TapLayouts::resolve(crate::test_resolver()).expect("ww_tap's snapshot resolves")
+    });
+    &LAYOUTS
 }

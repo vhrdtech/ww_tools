@@ -5,6 +5,12 @@
 //! bundle (`ww_self`) gives each id its identity name, and [keys](ww_tape::Items::WireWeaver::keys) the key that
 //! stands for the index into a keyed array (API-67). Producers and readers build the name path here, so they agree
 //! on the key. The tape format itself knows no bundle: this crate sits above both `ww_tape` and `ww_self`.
+//!
+//! A stream's `#[track(..)]` (API-71) says how a recorder lays it out: [stream_layout] reads it beside the name path,
+//! as ww_tape's events or series track kind, with the dimensions a writer may give.
+
+mod layout;
+pub use layout::{LayoutError, StreamKind, StreamLayout, stream_layout, stream_layout_at};
 
 use ww_self::keys::{KeysError, item_name, keys_level};
 use ww_self::{ApiBundleOwned, ApiItemKindOwned, ApiItemOwned, ApiLevelOwned, Multiplicity};
@@ -13,6 +19,8 @@ use ww_tape::{Segment, api_root_id, track_key};
 /// Why a numeric path has no name path in a bundle.
 #[derive(Debug)]
 pub enum NamePathError {
+    /// The path is empty: it names no resource.
+    Empty,
     /// No item of id `id` in the level reached at path position `at`.
     NoItem { at: usize, id: u32 },
     /// The path ends at an array, before its index.
@@ -34,6 +42,7 @@ pub enum NamePathError {
 impl core::fmt::Display for NamePathError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
+            NamePathError::Empty => write!(f, "the path is empty"),
             NamePathError::NoItem { at, id } => write!(f, "no item {id} at path position {at}"),
             NamePathError::MissingIndex { at } => {
                 write!(f, "the path ends at an array, index {at} missing")
