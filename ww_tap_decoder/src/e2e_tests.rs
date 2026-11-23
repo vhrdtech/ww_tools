@@ -617,7 +617,7 @@ async fn global_trait_calls_are_named() {
 /// sent (no lookup, no local cache), the unit found in that bundle, not in anything compiled into the reader.
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn a_quantity_by_reference_decodes_from_the_sent_bundle() {
-    use wire_weaver_client::quantity::{DynQuantity, DynUnit};
+    use ww_quantity::{DynQuantity, DynUnit};
     use ww_si::Unit;
 
     let path = "tap_decoder/quantity";

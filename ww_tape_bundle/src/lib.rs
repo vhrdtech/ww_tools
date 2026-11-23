@@ -13,6 +13,7 @@ mod layout;
 pub use layout::{LayoutError, StreamKind, StreamLayout, stream_layout, stream_layout_at};
 
 use ww_self::keys::{KeysError, item_name, keys_level};
+use ww_self::mount::{self, NotMount, slot_level};
 use ww_self::{ApiBundleOwned, ApiItemKindOwned, ApiItemOwned, ApiLevelOwned, Multiplicity};
 use ww_tape::{Segment, api_root_id, track_key};
 
@@ -37,6 +38,8 @@ pub enum NamePathError {
     Crate(anyhow::Error),
     /// A key companion's level can't be built.
     Keys(KeysError),
+    /// A mount slot's level can't be built (SRV-76).
+    Mount(NotMount),
 }
 
 impl core::fmt::Display for NamePathError {
@@ -59,6 +62,7 @@ impl core::fmt::Display for NamePathError {
             NamePathError::Trait(e) => write!(f, "trait level: {e}"),
             NamePathError::Crate(e) => write!(f, "root crate: {e}"),
             NamePathError::Keys(e) => write!(f, "key companion: {e}"),
+            NamePathError::Mount(e) => write!(f, "mount slot: {e}"),
         }
     }
 }
@@ -68,22 +72,25 @@ impl core::error::Error for NamePathError {
         match self {
             NamePathError::Trait(e) | NamePathError::Crate(e) => Some(e.as_ref()),
             NamePathError::Keys(e) => Some(e),
+            NamePathError::Mount(e) => Some(e),
             _ => None,
         }
     }
 }
 
-/// A level on the path: one of the bundle, or the fixed level of a key companion, whose names are constants.
+/// A level on the path: one of the bundle, or the fixed level of a key companion or a mount slot, whose names are
+/// constants. What a slot mounts is known only at run time, so the path ends at its `presence`.
 enum Level<'a> {
     Bundle(&'a ApiLevelOwned),
     Keys(ApiLevelOwned),
+    Mount(ApiLevelOwned),
 }
 
 impl Level<'_> {
     fn level(&self) -> &ApiLevelOwned {
         match self {
             Level::Bundle(level) => level,
-            Level::Keys(level) => level,
+            Level::Keys(level) | Level::Mount(level) => level,
         }
     }
 }
@@ -116,6 +123,10 @@ pub fn name_path<'a>(
                 find(lvl, at, id)?;
                 item_name(id).ok_or(NamePathError::NoItem { at, id })?
             }
+            Level::Mount(lvl) => {
+                find(lvl, at, id)?;
+                mount::item_name(id).ok_or(NamePathError::NoItem { at, id })?
+            }
         };
         segments.push(Segment::Name(name));
         let lvl = level.level();
@@ -146,6 +157,9 @@ pub fn name_path<'a>(
             ),
             ApiItemKindOwned::Keys { .. } => {
                 Level::Keys(keys_level(lvl, item).map_err(NamePathError::Keys)?)
+            }
+            ApiItemKindOwned::Mount { .. } => {
+                Level::Mount(slot_level(lvl, item).map_err(NamePathError::Mount)?)
             }
             _ => match steps.peek() {
                 Some(&(at, _)) => return Err(NamePathError::TooLong { at }),
